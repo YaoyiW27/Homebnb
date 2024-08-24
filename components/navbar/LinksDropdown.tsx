@@ -13,6 +13,7 @@ import { links } from '@/utils/links';
 import SignOutLink from './SignOutLink';
 import { SignedOut, SignedIn, SignInButton, SignUpButton } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
+
 function LinksDropdown() {
   const { userId } = auth();
   const isAdminUser = userId === process.env.ADMIN_USER_ID;

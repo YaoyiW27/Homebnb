@@ -12,11 +12,13 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
 
-function CheckoutPage() {
+export default function CheckoutPage() {
   const searchParams = useSearchParams();
+
   const bookingId = searchParams.get('bookingId');
 
   const fetchClientSecret = useCallback(async () => {
+    // Create a Checkout Session
     const response = await axios.post('/api/payment', {
       bookingId: bookingId,
     });
@@ -33,4 +35,3 @@ function CheckoutPage() {
     </div>
   );
 }
-export default CheckoutPage;

@@ -29,6 +29,7 @@ const getAdminUser = async () => {
   return user;
 };
 
+
 const renderError = (error: unknown): { message: string } => {
   console.log(error);
   return {
@@ -286,11 +287,11 @@ export const fetchPropertyDetails = (id: string) => {
   });
 };
 
+
 export async function createReviewAction(prevState: any, formData: FormData) {
   const user = await getAuthUser();
   try {
     const rawData = Object.fromEntries(formData);
-
     const validatedFields = validateWithZodSchema(createReviewSchema, rawData);
     await db.review.create({
       data: {
@@ -304,6 +305,7 @@ export async function createReviewAction(prevState: any, formData: FormData) {
     return renderError(error);
   }
 }
+
 
 export async function fetchPropertyReviews(propertyId: string) {
   const reviews = await db.review.findMany({
@@ -328,6 +330,7 @@ export async function fetchPropertyReviews(propertyId: string) {
   return reviews;
 }
 
+
 export const fetchPropertyReviewsByUser = async () => {
   const user = await getAuthUser();
   const reviews = await db.review.findMany({
@@ -349,6 +352,7 @@ export const fetchPropertyReviewsByUser = async () => {
   return reviews;
 };
 
+
 export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   const { reviewId } = prevState;
   const user = await getAuthUser();
@@ -368,17 +372,6 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   }
 };
 
-export const findExistingReview = async (
-  userId: string,
-  propertyId: string
-) => {
-  return db.review.findFirst({
-    where: {
-      profileId: userId,
-      propertyId: propertyId,
-    },
-  });
-};
 
 export async function fetchPropertyRating(propertyId: string) {
   const result = await db.review.groupBy({
@@ -401,6 +394,20 @@ export async function fetchPropertyRating(propertyId: string) {
   };
 }
 
+
+export const findExistingReview = async (
+  userId: string,
+  propertyId: string
+) => {
+  return db.review.findFirst({
+    where: {
+      profileId: userId,
+      propertyId: propertyId,
+    },
+  });
+};
+
+
 export const createBookingAction = async (prevState: {
   propertyId: string;
   checkIn: Date;
@@ -413,6 +420,7 @@ export const createBookingAction = async (prevState: {
       paymentStatus: false,
     },
   });
+
   let bookingId: null | string = null;
 
   const { propertyId, checkIn, checkOut } = prevState;
@@ -447,12 +455,12 @@ export const createBookingAction = async (prevState: {
   redirect(`/checkout?bookingId=${bookingId}`);
 };
 
+
 export const fetchBookings = async () => {
   const user = await getAuthUser();
   const bookings = await db.booking.findMany({
     where: {
       profileId: user.id,
-      paymentStatus: true,
     },
     include: {
       property: {
@@ -463,13 +471,13 @@ export const fetchBookings = async () => {
         },
       },
     },
-
     orderBy: {
       checkIn: 'desc',
     },
   });
   return bookings;
 };
+
 
 export async function deleteBookingAction(prevState: { bookingId: string }) {
   const { bookingId } = prevState;
@@ -489,6 +497,7 @@ export async function deleteBookingAction(prevState: { bookingId: string }) {
     return renderError(error);
   }
 }
+
 
 export const fetchRentals = async () => {
   const user = await getAuthUser();
@@ -536,6 +545,7 @@ export const fetchRentals = async () => {
   return rentalsWithBookingSums;
 };
 
+
 export async function deleteRentalAction(prevState: { propertyId: string }) {
   const { propertyId } = prevState;
   const user = await getAuthUser();
@@ -555,6 +565,7 @@ export async function deleteRentalAction(prevState: { propertyId: string }) {
   }
 }
 
+
 export const fetchRentalDetails = async (propertyId: string) => {
   const user = await getAuthUser();
 
@@ -565,6 +576,7 @@ export const fetchRentalDetails = async (propertyId: string) => {
     },
   });
 };
+
 
 export const updatePropertyAction = async (
   prevState: any,
@@ -592,6 +604,7 @@ export const updatePropertyAction = async (
     return renderError(error);
   }
 };
+
 
 export const updatePropertyImageAction = async (
   prevState: any,
@@ -621,6 +634,7 @@ export const updatePropertyImageAction = async (
   }
 };
 
+
 export const fetchReservations = async () => {
   const user = await getAuthUser();
 
@@ -631,9 +645,11 @@ export const fetchReservations = async () => {
         profileId: user.id,
       },
     },
+
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'desc', // or 'asc' for ascending order
     },
+
     include: {
       property: {
         select: {
@@ -642,11 +658,12 @@ export const fetchReservations = async () => {
           price: true,
           country: true,
         },
-      },
+      }, // include property details in the result
     },
   });
   return reservations;
 };
+
 
 export const fetchStats = async () => {
   await getAdminUser();
@@ -656,7 +673,7 @@ export const fetchStats = async () => {
   const bookingsCount = await db.booking.count({
     where: {
       paymentStatus: true,
-    },
+    }
   });
 
   return {
@@ -665,6 +682,7 @@ export const fetchStats = async () => {
     bookingsCount,
   };
 };
+
 
 export const fetchChartsData = async () => {
   await getAdminUser();
@@ -685,6 +703,7 @@ export const fetchChartsData = async () => {
   });
   const bookingsPerMonth = bookings.reduce((total, current) => {
     const date = formatDate(current.createdAt, true);
+
     const existingEntry = total.find((entry) => entry.date === date);
     if (existingEntry) {
       existingEntry.count += 1;
@@ -696,9 +715,9 @@ export const fetchChartsData = async () => {
   return bookingsPerMonth;
 };
 
+
 export const fetchReservationStats = async () => {
   const user = await getAuthUser();
-
   const properties = await db.property.count({
     where: {
       profileId: user.id,

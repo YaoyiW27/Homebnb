@@ -14,19 +14,23 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Stats from '@/components/reservations/Stats';
+
 async function ReservationsPage() {
   const reservations = await fetchReservations();
-  if (reservations.length === 0) return <EmptyList />;
+
+  if (reservations.length === 0) {
+    return <EmptyList />;
+  }
 
   return (
     <>
-      <Stats />
+    <Stats/>
       <div className='mt-16'>
         <h4 className='mb-4 capitalize'>
           total reservations : {reservations.length}
         </h4>
         <Table>
-          <TableCaption>A list of recent reservations</TableCaption>
+          <TableCaption>A list of your recent reservations.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Property Name</TableHead>
@@ -41,7 +45,6 @@ async function ReservationsPage() {
             {reservations.map((item) => {
               const { id, orderTotal, totalNights, checkIn, checkOut } = item;
               const { id: propertyId, name, country } = item.property;
-
               const startDate = formatDate(checkIn);
               const endDate = formatDate(checkOut);
               return (

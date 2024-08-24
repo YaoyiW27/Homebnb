@@ -7,6 +7,7 @@ import RatingInput from '@/components/form/RatingInput';
 import TextAreaInput from '@/components/form/TextAreaInput';
 import { Button } from '@/components/ui/button';
 import { createReviewAction } from '@/utils/actions';
+
 function SubmitReview({ propertyId }: { propertyId: string }) {
   const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
   return (

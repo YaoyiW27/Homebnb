@@ -7,6 +7,7 @@ import ReviewCard from '@/components/reviews/ReviewCard';
 import Title from '@/components/properties/Title';
 import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/Buttons';
+
 async function ReviewsPage() {
   const reviews = await fetchPropertyReviewsByUser();
   if (reviews.length === 0) return <EmptyList />;
@@ -37,11 +38,9 @@ async function ReviewsPage() {
 
 const DeleteReview = ({ reviewId }: { reviewId: string }) => {
   const deleteReview = deleteReviewAction.bind(null, { reviewId });
-  return (
-    <FormContainer action={deleteReview}>
+  return <FormContainer action={deleteReview}>
       <IconButton actionType='delete' />
     </FormContainer>
-  );
 };
 
 export default ReviewsPage;

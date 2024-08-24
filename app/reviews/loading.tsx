@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+
 function loading() {
   return (
     <section className='grid md:grid-cols-2 gap-8 mt-4 '>

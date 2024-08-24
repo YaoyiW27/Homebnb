@@ -77,6 +77,7 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
 };
 
 type actionType = 'edit' | 'delete';
+
 export const IconButton = ({ actionType }: { actionType: actionType }) => {
   const { pending } = useFormStatus();
 
