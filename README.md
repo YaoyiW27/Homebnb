@@ -1,2 +1,2 @@
 # Homebnb
-## An Airbnb clone | Full-stack web application
+## An Airbnb clone | Full-stack web application 🏠
